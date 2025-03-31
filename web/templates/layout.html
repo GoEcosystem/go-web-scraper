@@ -1,0 +1,169 @@
+{{ define "layout" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if .Title }}{{ .Title }}{{ else }}Web Scraper{{ end }} - Web Scraper</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Web Scraper</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/articles">Articles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">Products</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- This is where page-specific content will go -->
+        {{ block "content" . }}{{ end }}
+    </main>
+
+    <footer class="container mt-5 pt-3 border-top text-center text-muted">
+        <p>&copy; 2025 Web Scraper Project</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Copy command functionality
+            const copyButtons = document.querySelectorAll('.copy-command');
+            
+            copyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const command = this.getAttribute('data-command');
+                    navigator.clipboard.writeText(command)
+                        .then(() => {
+                            // Change button text temporarily to show success
+                            const originalHtml = this.innerHTML;
+                            this.innerHTML = '<span class="text-success">✓ Copied!</span>';
+                            
+                            // Restore original text after 2 seconds
+                            setTimeout(() => {
+                                this.innerHTML = originalHtml;
+                            }, 2000);
+                        })
+                        .catch(err => {
+                            console.error('Failed to copy: ', err);
+                            alert('Failed to copy command. Please try again.');
+                        });
+                });
+            });
+
+            // Run scraper functionality
+            const runButtons = document.querySelectorAll('.run-scraper');
+            
+            runButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const scraperID = this.getAttribute('data-id');
+                    const scraperName = this.getAttribute('data-name');
+                    
+                    if (!confirm(`Are you sure you want to run the ${scraperName} scraper?`)) {
+                        return;
+                    }
+                    
+                    // Disable button and show loading state
+                    this.disabled = true;
+                    const originalText = this.textContent;
+                    this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Running...';
+                    
+                    // Create form data
+                    const formData = new FormData();
+                    formData.append('scraper_id', scraperID);
+                    
+                    // Send request to run scraper
+                    fetch('/api/scrapers/run', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            // Start polling for status updates
+                            const runID = data.run_id;
+                            pollScraperStatus(runID, button);
+                        } else {
+                            alert('Failed to start scraper: ' + data.message);
+                            button.disabled = false;
+                            button.textContent = originalText;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error running scraper:', error);
+                        alert('Error running scraper. Please try again.');
+                        button.disabled = false;
+                        button.textContent = originalText;
+                    });
+                });
+            });
+            
+            // Function to poll scraper status
+            function pollScraperStatus(runID, button) {
+                const statusCheck = setInterval(() => {
+                    fetch(`/api/scrapers/status?run_id=${runID}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status !== 'running') {
+                                // Scraper finished
+                                clearInterval(statusCheck);
+                                
+                                // Update button
+                                button.disabled = false;
+                                
+                                if (data.status === 'success') {
+                                    button.innerHTML = '<span class="text-success">✓ Success</span>';
+                                    setTimeout(() => {
+                                        button.textContent = 'Run Scraper';
+                                        // Reload page to show updated stats
+                                        window.location.reload();
+                                    }, 2000);
+                                } else {
+                                    button.innerHTML = '<span class="text-danger">✗ Failed</span>';
+                                    setTimeout(() => {
+                                        button.textContent = 'Run Scraper';
+                                    }, 2000);
+                                    
+                                    if (data.error_message) {
+                                        console.error('Scraper error:', data.error_message);
+                                    }
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error checking scraper status:', error);
+                            clearInterval(statusCheck);
+                            button.disabled = false;
+                            button.textContent = 'Run Scraper';
+                        });
+                }, 2000); // Check every 2 seconds
+            }
+        });
+    </script>
+</body>
+</html>
+{{ end }}

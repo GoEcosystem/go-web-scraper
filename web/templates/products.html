@@ -1,0 +1,87 @@
+{{template "layout" .}}
+
+{{define "content"}}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{{ .Title }}</h1>
+        <a href="/" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
+
+    {{ if .Products }}
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="card-title mb-0">Products</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 p-3">
+                {{ range .Products }}
+                <div class="col">
+                    <div class="card h-100">
+                        {{ if .ImageURL }}
+                        <img src="{{ .ImageURL }}" class="card-img-top" alt="{{ .Title }}" style="height: 200px; object-fit: contain; padding: 10px;">
+                        {{ end }}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ .Title }}</h5>
+                            {{ if .Description }}
+                            <p class="card-text">{{ .Description }}</p>
+                            {{ end }}
+                            <p class="card-text">
+                                <span class="badge bg-primary">{{ formatPrice .Price }}</span>
+                                {{ if .Category }}
+                                <span class="badge bg-secondary">{{ .Category }}</span>
+                                {{ end }}
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ .URL }}" target="_blank" class="btn btn-success">View Product</a>
+                        </div>
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    {{ if or .HasPrevPage .HasNextPage }}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item {{ if not .HasPrevPage }}disabled{{ end }}">
+                <a class="page-link" href="/products?page={{ sub .CurrentPage 1 }}" {{ if not .HasPrevPage }}tabindex="-1" aria-disabled="true"{{ end }}>Previous</a>
+            </li>
+            
+            {{ $currentPage := .CurrentPage }}
+            {{ $totalPages := .TotalPages }}
+            
+            {{ range $i := seq 1 .TotalPages }}
+                <li class="page-item {{ if eq $i $currentPage }}active{{ end }}">
+                    <a class="page-link" href="/products?page={{ $i }}">{{ $i }}</a>
+                </li>
+            {{ end }}
+            
+            <li class="page-item {{ if not .HasNextPage }}disabled{{ end }}">
+                <a class="page-link" href="/products?page={{ add .CurrentPage 1 }}" {{ if not .HasNextPage }}tabindex="-1" aria-disabled="true"{{ end }}>Next</a>
+            </li>
+        </ul>
+    </nav>
+    {{ end }}
+    
+    {{ else }}
+    <!-- Custom message from server -->
+    {{ if .Message }}
+    <div class="alert alert-info">
+        <p>{{ .Message }}</p>
+        {{ if .Command }}
+        <pre class="mt-3">{{ .Command }}</pre>
+        {{ end }}
+    </div>
+    {{ else }}
+    <!-- Default product-specific empty state -->
+    <div class="alert alert-info">
+        <p>No products found. Please run the scraper to collect data. You can do this by running the following command in your terminal:</p>
+        <pre class="mt-3">go run cmd/scraper/main.go -target bookstore -pages 3 -format json</pre>
+    </div>
+    {{ end }}
+    {{ end }}
+</div>
+{{end}}

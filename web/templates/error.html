@@ -1,0 +1,15 @@
+{{template "layout" .}}
+
+{{define "content"}}
+<div class="container">
+    <div class="alert alert-danger mt-4">
+        <h4 class="alert-heading">Error</h4>
+        <p>{{ .Error }}</p>
+        <hr>
+        <p class="mb-0">Please try again or contact the administrator if the problem persists.</p>
+    </div>
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-primary">Return to Dashboard</a>
+    </div>
+</div>
+{{end}}
