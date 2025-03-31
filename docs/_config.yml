@@ -1,0 +1,8 @@
+theme: jekyll-theme-cayman
+title: Go Web Scraper
+description: A comprehensive web scraping solution built in Go with database integration and web interface
+show_downloads: true
+github:
+  repository_url: https://github.com/GoEcosystem/go-web-scraper
+  zip_url: https://github.com/GoEcosystem/go-web-scraper/archive/refs/heads/main.zip
+  tar_url: https://github.com/GoEcosystem/go-web-scraper/archive/refs/heads/main.tar.gz
