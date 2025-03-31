@@ -88,6 +88,8 @@ The web interface provides a simple API for accessing scraped data:
 - `GET /api/products` - List all products
 - `GET /api/products/:id` - Get specific product
 
+For full API documentation, see the [API documentation page](api.html).
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
