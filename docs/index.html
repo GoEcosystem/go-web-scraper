@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Web Scraper</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #24292e;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3rem;
+        }
+        .feature-list {
+            margin-top: 2rem;
+        }
+        .feature-list li {
+            margin-bottom: 0.5rem;
+        }
+        .btn-section {
+            margin-top: 2rem;
+        }
+        pre {
+            background-color: #f6f8fa;
+            border-radius: 3px;
+            padding: 1rem;
+            overflow: auto;
+        }
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: #6a737d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Go Web Scraper</h1>
+        <p class="lead">A comprehensive web scraping solution built in Go, featuring concurrent scraping, database integration, and a responsive web interface.</p>
+        
+        <div class="feature-list">
+            <h2>Features</h2>
+            <ul>
+                <li><strong>Multi-site Scraping</strong>: Extract data from different websites including Hacker News and bookstore sites</li>
+                <li><strong>Concurrent Processing</strong>: Utilizes Go's goroutines for efficient parallel scraping</li>
+                <li><strong>SQLite Database</strong>: Persistent storage of all scraped data with proper schema design</li>
+                <li><strong>Web Interface</strong>: Bootstrap-styled UI for browsing and searching scraped content</li>
+                <li><strong>Data Export</strong>: Export scraped data to JSON and CSV formats</li>
+                <li><strong>Pagination Support</strong>: Efficient navigation through large datasets of articles and products</li>
+                <li><strong>Dashboard</strong>: Statistics and overview of the database contents</li>
+                <li><strong>Ethical Scraping</strong>: Built-in rate limiting and user agent rotation</li>
+                <li><strong>Import Functionality</strong>: Load data from JSON files into the database</li>
+            </ul>
+        </div>
+        
+        <div class="btn-section">
+            <h2>Documentation</h2>
+            <ul>
+                <li><a href="api.html">API Documentation</a> - Detailed API reference for the web interface</li>
+                <li><a href="architecture.html">Architecture Overview</a> - Technical design and structure of the project</li>
+            </ul>
+        </div>
+        
+        <div class="btn-section">
+            <h2>Getting Started</h2>
+            <pre><code>
+# Clone the repository
+git clone https://github.com/GoEcosystem/go-web-scraper.git
+cd go-web-scraper
+
+# Build the application
+go build -o scraper ./cmd/scraper
+            </code></pre>
+        </div>
+        
+        <div class="btn-section">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <a href="https://github.com/GoEcosystem/go-web-scraper" class="btn btn-primary">View on GitHub</a>
+                <a href="https://github.com/GoEcosystem/go-web-scraper/archive/refs/heads/main.zip" class="btn btn-outline-secondary">Download ZIP</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Go Web Scraper is part of the <a href="https://goecosystem.github.io/">GoEcosystem</a> organization.</p>
+            <p>Copyright &copy; 2025 GoEcosystem. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
