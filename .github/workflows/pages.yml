@@ -1,4 +1,4 @@
-name: Deploy GitHub Pages
+name: GitHub Pages
 
 on:
   push:
@@ -6,36 +6,25 @@ on:
       - main
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
       - name: Setup Pages
         uses: actions/configure-pages@v3
-        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './docs'
-      
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
