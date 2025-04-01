@@ -6,3 +6,37 @@ github:
   repository_url: https://github.com/GoEcosystem/go-web-scraper
   zip_url: https://github.com/GoEcosystem/go-web-scraper/archive/refs/heads/main.zip
   tar_url: https://github.com/GoEcosystem/go-web-scraper/archive/refs/heads/main.tar.gz
+
+# Jekyll settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# GitHub Pages specific settings
+lsi: false
+safe: true
+source: .
+incremental: false
+gist:
+  noscript: false
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-relative-links
+
+# Link rendering
+relative_links:
+  enabled: true
+  collections: true
+
+# Default layout
+defaults:
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
