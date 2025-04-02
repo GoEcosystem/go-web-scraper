@@ -1,8 +1,8 @@
 # Site settings
 title: Go Web Scraper
 description: A comprehensive web scraping solution built in Go with database integration and web interface
-baseurl: "/go-web-scraper" # the subpath of your site, e.g. /blog
-url: "https://goecosystem.github.io" # the base hostname & protocol for your site
+baseurl: ""
+url: "https://goecosystem.github.io/go-web-scraper"
 repository: GoEcosystem/go-web-scraper
 
 # Build settings
@@ -11,15 +11,14 @@ highlighter: rouge
 
 # Jekyll settings
 permalink: pretty
-exclude:
-  - .git/
-  - .github/
-  - node_modules/
-  - vendor/
-  - Gemfile
-  - Gemfile.lock
-  - LICENSE
-  - README.md
+
+# GitHub Pages settings
+github:
+  is_project_page: true
+  repository_url: https://github.com/GoEcosystem/go-web-scraper
+  repository_name: go-web-scraper
+  owner_name: GoEcosystem
+  owner_url: https://github.com/GoEcosystem
 
 # Theme and plugins
 theme: jekyll-theme-cayman
@@ -28,11 +27,15 @@ plugins:
   - jekyll-relative-links
   - jekyll-github-metadata
 
+# Link rendering
+relative_links:
+  enabled: true
+  collections: true
+
 # Default layouts
 defaults:
   - scope:
       path: ""
-      type: "pages"
     values:
       layout: "default"
   - scope:
@@ -47,6 +50,17 @@ defaults:
       path: "reference"
     values:
       layout: "reference"
+
+# Exclude from processing
+exclude:
+  - .git/
+  - .github/
+  - node_modules/
+  - vendor/
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - README.md
 
 # Navigation
 navigation:
@@ -66,11 +80,6 @@ source: .
 incremental: false
 gist:
   noscript: false
-
-# Link rendering
-relative_links:
-  enabled: true
-  collections: true
 
 # GitHub
 github:
