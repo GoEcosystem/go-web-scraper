@@ -1,5 +1,5 @@
 ---
-layout: api
+layout: default
 title: API Documentation
 ---
 
