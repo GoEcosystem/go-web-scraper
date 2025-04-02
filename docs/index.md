@@ -88,7 +88,7 @@ The web interface provides a simple API for accessing scraped data:
 - `GET /api/products` - List all products
 - `GET /api/products/:id` - Get specific product
 
-For full API documentation, see the [API documentation page](api.html).
+For full API documentation, see the [API documentation page](https://goecosystem.github.io/go-web-scraper/api).
 
 ## License
 
