@@ -86,6 +86,54 @@ Then open your browser at http://localhost:8080
     └── templates/        # HTML templates
 ```
 
+## Documentation
+
+Comprehensive documentation is available in the `/docs` directory and can be viewed online once GitHub Pages is enabled.
+
+### Local Documentation Preview
+
+To view the documentation locally:
+
+1. Navigate to the docs directory:
+   ```bash
+   cd docs
+   ```
+
+2. Install Ruby dependencies:
+   ```bash
+   bundle install
+   ```
+
+3. Run the Jekyll server:
+   ```bash
+   bundle exec jekyll serve
+   ```
+
+4. Open your browser and visit:
+   ```
+   http://localhost:4000
+   ```
+
+### Enabling GitHub Pages (Repository Admins)
+
+To publish the documentation on GitHub Pages:
+
+1. Go to the repository settings: https://github.com/GoEcosystem/go-web-scraper/settings/pages
+2. Under "Source", select "Deploy from a branch"
+3. Choose the "main" branch and the "/docs" folder
+4. Click "Save"
+
+Once enabled, documentation will be available at: https://goecosystem.github.io/go-web-scraper/
+
+### Documentation Structure
+
+The documentation follows the standardized GoEcosystem documentation approach with:
+
+- API documentation
+- Architecture reference
+- User guides
+- Examples
+
 ## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](https://github.com/GoEcosystem/go-docs/blob/main/CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
