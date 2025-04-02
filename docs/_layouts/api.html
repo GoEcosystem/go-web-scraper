@@ -7,6 +7,7 @@ layout: default
 </div>
 
 <style>
+  /* API Documentation specific styling */
   .api-documentation {
     max-width: 900px;
     margin: 0 auto;
@@ -55,7 +56,7 @@ layout: default
   }
   
   .api-documentation code {
-    font-family: 'JetBrains Mono', monospace, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
     background-color: #F0F5F9;
     padding: 0.1rem 0.3rem;
     border-radius: 3px;
@@ -85,15 +86,54 @@ layout: default
   .api-documentation li {
     margin-bottom: 0.5rem;
   }
+
+  /* Endpoint styling */
+  .endpoint-method {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+  }
   
-  @media (max-width: 768px) {
-    .api-documentation {
-      padding: 0 1rem;
-    }
-    
-    .api-documentation table {
-      display: block;
-      overflow-x: auto;
-    }
+  .endpoint-method.get {
+    background-color: #D1ECF1;
+    color: #0C5460;
+  }
+  
+  .endpoint-method.post {
+    background-color: #D4EDDA;
+    color: #155724;
+  }
+  
+  .endpoint-method.put {
+    background-color: #FFF3CD;
+    color: #856404;
+  }
+  
+  .endpoint-method.delete {
+    background-color: #F8D7DA;
+    color: #721C24;
+  }
+  
+  .endpoint-url {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    padding: 0.25rem 0.5rem;
+    background-color: #F0F5F9;
+    border-radius: 4px;
+  }
+  
+  /* Response status colors */
+  .status-200 {
+    color: #155724;
+  }
+  
+  .status-400, .status-404 {
+    color: #856404;
+  }
+  
+  .status-500 {
+    color: #721C24;
   }
 </style>

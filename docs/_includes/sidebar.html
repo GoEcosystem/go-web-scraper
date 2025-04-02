@@ -1,0 +1,120 @@
+<div class="section-sidebar">
+  <div class="sidebar-container">
+    <div class="sidebar-header">
+      <h3>{{ include.title | default: "Navigation" }}</h3>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        {% if include.items %}
+          {% for item in include.items %}
+            <li class="sidebar-item {% if page.url == item.url %}active{% endif %}">
+              <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+              
+              {% if item.subitems %}
+                <ul class="sidebar-subitems">
+                  {% for subitem in item.subitems %}
+                    <li class="sidebar-subitem {% if page.url == subitem.url %}active{% endif %}">
+                      <a href="{{ subitem.url | relative_url }}">{{ subitem.title }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        {% elsif include.section %}
+          {% assign section_pages = site.pages | where_exp: "page", "page.url contains include.section" | sort: "order" %}
+          {% for item in section_pages %}
+            <li class="sidebar-item {% if page.url == item.url %}active{% endif %}">
+              <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+            </li>
+          {% endfor %}
+        {% elsif include.category %}
+          {% assign category_docs = site.documents | where: "category", include.category | sort: "order" %}
+          {% for doc in category_docs %}
+            <li class="sidebar-item {% if page.url == doc.url %}active{% endif %}">
+              <a href="{{ doc.url | relative_url }}">{{ doc.title }}</a>
+            </li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<style>
+  .section-sidebar {
+    width: 250px;
+    background-color: #F8F9FA;
+    border-radius: 5px;
+    border: 1px solid #E9ECEF;
+    margin-bottom: 2rem;
+  }
+  
+  .sidebar-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .sidebar-header {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #E9ECEF;
+    padding-bottom: 0.75rem;
+  }
+  
+  .sidebar-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #212529;
+  }
+  
+  .sidebar-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar-item {
+    margin-bottom: 0.75rem;
+  }
+  
+  .sidebar-item a {
+    display: block;
+    color: #495057;
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .sidebar-item a:hover {
+    background-color: rgba(0, 173, 216, 0.1);
+    color: #00ADD8;
+  }
+  
+  .sidebar-item.active > a {
+    background-color: #00ADD8;
+    color: white;
+    font-weight: 500;
+  }
+  
+  .sidebar-subitems {
+    margin-top: 0.5rem !important;
+    padding-left: 1rem !important;
+  }
+  
+  .sidebar-subitem {
+    margin-bottom: 0.5rem;
+  }
+  
+  .sidebar-subitem a {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive styling */
+  @media (max-width: 768px) {
+    .section-sidebar {
+      width: 100%;
+    }
+  }
+</style>

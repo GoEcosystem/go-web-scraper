@@ -1,0 +1,199 @@
+---
+layout: default
+---
+
+<div class="guide-content">
+  <aside class="guide-sidebar">
+    <div class="guide-toc">
+      <h3>On This Page</h3>
+      <div id="toc"></div>
+    </div>
+    
+    {% if page.related_guides %}
+    <div class="related-guides">
+      <h3>Related Guides</h3>
+      <ul>
+        {% for guide in page.related_guides %}
+        <li><a href="{{ guide.url | relative_url }}">{{ guide.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </aside>
+  
+  <div class="guide-main">
+    {{ content }}
+    
+    <div class="guide-footer">
+      <div class="guide-footer-links">
+        {% if page.previous %}
+        <a href="{{ page.previous.url | relative_url }}" class="guide-prev">
+          &larr; Previous: {{ page.previous.title }}
+        </a>
+        {% endif %}
+        
+        {% if page.next %}
+        <a href="{{ page.next.url | relative_url }}" class="guide-next">
+          Next: {{ page.next.title }} &rarr;
+        </a>
+        {% endif %}
+      </div>
+      
+      <div class="guide-feedback">
+        <p>
+          Found an issue? 
+          <a href="https://github.com/GoEcosystem/{{ page.repo_name | default: 'GoEcosystem.github.io' }}/edit/main/{{ page.path }}">
+            Edit this page on GitHub
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .guide-content {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .guide-sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 2rem;
+    align-self: flex-start;
+    padding: 1rem;
+    border-right: 1px solid #E9ECEF;
+  }
+  
+  .guide-main {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .guide-toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 0.5rem;
+  }
+  
+  .guide-toc ul ul {
+    padding-left: 1rem;
+  }
+  
+  .guide-toc li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .guide-toc a {
+    color: #495057;
+    text-decoration: none;
+  }
+  
+  .guide-toc a:hover {
+    color: #00ADD8;
+    text-decoration: underline;
+  }
+  
+  .guide-footer {
+    margin-top: 3rem;
+    border-top: 1px solid #E9ECEF;
+    padding-top: 1rem;
+  }
+  
+  .guide-footer-links {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  
+  .guide-prev, .guide-next {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: #F8F9FA;
+    text-decoration: none;
+    color: #495057;
+  }
+  
+  .guide-prev:hover, .guide-next:hover {
+    background-color: #E9ECEF;
+    color: #212529;
+  }
+  
+  .guide-feedback {
+    font-size: 0.9rem;
+    color: #6C757D;
+  }
+  
+  .guide-feedback a {
+    color: #00ADD8;
+    text-decoration: none;
+  }
+  
+  .guide-feedback a:hover {
+    text-decoration: underline;
+  }
+  
+  .related-guides {
+    margin-top: 2rem;
+  }
+  
+  .related-guides ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .related-guides li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .related-guides a {
+    color: #00ADD8;
+    text-decoration: none;
+  }
+  
+  .related-guides a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .guide-content {
+      flex-direction: column;
+    }
+    
+    .guide-sidebar {
+      width: 100%;
+      position: relative;
+      top: 0;
+      border-right: none;
+      border-bottom: 1px solid #E9ECEF;
+      margin-bottom: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Generate table of contents
+    var headings = document.querySelectorAll('.guide-main h2, .guide-main h3');
+    var toc = document.getElementById('toc');
+    var tocHTML = '<ul>';
+    
+    headings.forEach(function(heading) {
+      // Generate an ID if the heading doesn't have one
+      if (!heading.id) {
+        heading.id = heading.textContent.toLowerCase().replace(/[^\w]+/g, '-');
+      }
+      
+      var level = heading.tagName === 'H2' ? '' : 'class="submenu"';
+      tocHTML += '<li ' + level + '><a href="#' + heading.id + '">' + heading.textContent + '</a></li>';
+    });
+    
+    tocHTML += '</ul>';
+    toc.innerHTML = tocHTML;
+  });
+</script>

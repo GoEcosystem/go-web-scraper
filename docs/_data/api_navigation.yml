@@ -1,0 +1,18 @@
+- title: Introduction
+  url: "#base-url"
+- title: Authentication
+  url: "#authentication"
+- title: Endpoints
+  url: "#endpoints"
+  subitems:
+    - title: Articles
+      url: "#articles"
+    - title: Products
+      url: "#products"
+    - title: Export
+      url: "#export"
+- title: Error Handling
+  url: "#error-handling"
+  subitems:
+    - title: Common Errors
+      url: "#common-error-codes"

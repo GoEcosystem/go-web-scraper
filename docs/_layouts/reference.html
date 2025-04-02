@@ -1,0 +1,248 @@
+---
+layout: default
+---
+
+<div class="reference-documentation">
+  <div class="reference-sidebar">
+    <div class="sidebar-header">On This Page</div>
+    <nav class="toc" id="toc"></nav>
+  </div>
+  
+  <div class="reference-content">
+    {{ content }}
+  </div>
+</div>
+
+<style>
+  /* Reference Documentation specific styling */
+  .reference-documentation {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 2rem;
+  }
+  
+  .reference-sidebar {
+    width: 250px;
+    position: sticky;
+    top: 2rem;
+    align-self: flex-start;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    padding-right: 1rem;
+  }
+  
+  .sidebar-header {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    color: var(--gray-700);
+  }
+  
+  .reference-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .reference-content h1 {
+    color: #00ADD8;
+    margin-bottom: 1.5rem;
+  }
+  
+  .reference-content h2 {
+    color: #0D1117;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #E9ECEF;
+  }
+  
+  .reference-content h3 {
+    color: #0092B8;
+    margin-top: 1.5rem;
+  }
+  
+  .reference-content h4 {
+    color: #333;
+    margin-top: 1.2rem;
+  }
+  
+  .reference-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 2rem 0;
+  }
+  
+  .reference-content th {
+    background-color: #F0F5F9;
+    padding: 0.75rem;
+    text-align: left;
+    border: 1px solid #E9ECEF;
+  }
+  
+  .reference-content td {
+    padding: 0.75rem;
+    border: 1px solid #E9ECEF;
+  }
+  
+  .reference-content code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    background-color: #F0F5F9;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-size: 0.9rem;
+  }
+  
+  .reference-content pre {
+    background-color: #1F2937;
+    color: #E5E7EB;
+    padding: 1rem;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+  
+  .reference-content pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+    font-size: 0.9rem;
+  }
+  
+  /* Table of Contents styling */
+  .toc {
+    font-size: 0.9rem;
+  }
+  
+  .toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  .toc ul ul {
+    padding-left: 1rem;
+    margin-top: 0.25rem;
+  }
+  
+  .toc li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .toc a {
+    color: var(--gray-700);
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.25rem 0;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+  }
+  
+  .toc a:hover, 
+  .toc a.active {
+    color: var(--primary-color);
+    background-color: rgba(0, 173, 216, 0.05);
+    padding-left: 0.5rem;
+    margin-left: -0.5rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .reference-documentation {
+      flex-direction: column;
+    }
+    
+    .reference-sidebar {
+      width: 100%;
+      position: relative;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+  }
+</style>
+
+<script>
+  // Generate Table of Contents dynamically
+  document.addEventListener('DOMContentLoaded', function() {
+    const headings = document.querySelectorAll('.reference-content h2, .reference-content h3');
+    const toc = document.getElementById('toc');
+    
+    if (headings.length === 0) {
+      document.querySelector('.reference-sidebar').style.display = 'none';
+      return;
+    }
+    
+    const tocList = document.createElement('ul');
+    let currentList = tocList;
+    let lastLevel = 2;
+    let subList = null;
+    
+    headings.forEach(heading => {
+      const level = parseInt(heading.tagName.charAt(1));
+      const id = heading.id || heading.textContent.toLowerCase().replace(/[^\w]+/g, '-');
+      
+      // Ensure the heading has an ID for linking
+      if (!heading.id) {
+        heading.id = id;
+      }
+      
+      const listItem = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = `#${id}`;
+      link.textContent = heading.textContent;
+      listItem.appendChild(link);
+      
+      // Handle nesting of h3 under h2
+      if (level > lastLevel) {
+        subList = document.createElement('ul');
+        currentList.lastChild.appendChild(subList);
+        currentList = subList;
+      } else if (level < lastLevel) {
+        // Go back to parent list
+        currentList = tocList;
+      }
+      
+      currentList.appendChild(listItem);
+      lastLevel = level;
+      
+      // Add click event to scroll to the heading
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetElement = document.getElementById(id);
+        window.scrollTo({
+          top: targetElement.offsetTop - 20,
+          behavior: 'smooth'
+        });
+        
+        // Update active state
+        document.querySelectorAll('.toc a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+    
+    toc.appendChild(tocList);
+    
+    // Highlight the current section while scrolling
+    window.addEventListener('scroll', function() {
+      let current = '';
+      const scrollY = window.pageYOffset;
+      
+      headings.forEach(heading => {
+        const sectionTop = heading.offsetTop - 100;
+        
+        if (scrollY >= sectionTop) {
+          current = heading.id;
+        }
+      });
+      
+      document.querySelectorAll('.toc a').forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === `#${current}`) {
+          a.classList.add('active');
+        }
+      });
+    });
+  });
+</script>

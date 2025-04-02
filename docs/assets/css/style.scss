@@ -1,0 +1,67 @@
+---
+---
+
+// Use the modern @use directive instead of @import
+// This addresses the deprecation warnings
+
+// Define color variables
+$header-bg-color: #00ADD8;
+$header-bg-color-secondary: #0092B8;
+$section-headings-color: #00ADD8;
+$body-link-color: #00ADD8;
+
+// Import the theme styles by including them
+@import 'jekyll-theme-cayman';
+
+// Additional custom styles
+.site-header {
+  background-color: #00ADD8;
+}
+
+.site-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+// Custom styles for the Go Web Scraper documentation
+.hero-section {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.documentation-home .feature-card h3 {
+  color: #00ADD8;
+}
+
+.documentation-home .doc-card h3 {
+  color: #00ADD8;
+}
+
+.api-documentation .endpoint-method {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.api-documentation .endpoint-method.get {
+  background-color: #D1ECF1;
+  color: #0C5460;
+}
+
+.api-documentation .endpoint-method.post {
+  background-color: #D4EDDA;
+  color: #155724;
+}
+
+.api-documentation .endpoint-method.put {
+  background-color: #FFF3CD;
+  color: #856404;
+}
+
+.api-documentation .endpoint-method.delete {
+  background-color: #F8D7DA;
+  color: #721C24;
+}

@@ -1,18 +1,63 @@
-theme: jekyll-theme-cayman
+# Site settings
 title: Go Web Scraper
 description: A comprehensive web scraping solution built in Go with database integration and web interface
-show_downloads: true
-github:
-  repository_url: https://github.com/GoEcosystem/go-web-scraper
-  zip_url: https://github.com/GoEcosystem/go-web-scraper/archive/refs/heads/main.zip
-  tar_url: https://github.com/GoEcosystem/go-web-scraper/archive/refs/heads/main.tar.gz
+baseurl: "/go-web-scraper" # the subpath of your site, e.g. /blog
+url: "https://goecosystem.github.io" # the base hostname & protocol for your site
+repository: GoEcosystem/go-web-scraper
 
-# Jekyll settings
+# Build settings
 markdown: kramdown
 highlighter: rouge
-kramdown:
-  input: GFM
-  syntax_highlighter: rouge
+
+# Jekyll settings
+permalink: pretty
+exclude:
+  - .git/
+  - .github/
+  - node_modules/
+  - vendor/
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - README.md
+
+# Theme and plugins
+theme: jekyll-theme-cayman
+plugins:
+  - jekyll-seo-tag
+  - jekyll-relative-links
+  - jekyll-github-metadata
+
+# Default layouts
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: "api"
+    values:
+      layout: "api"
+  - scope:
+      path: "guides"
+    values:
+      layout: "guide"
+  - scope:
+      path: "reference"
+    values:
+      layout: "reference"
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: API Reference
+    url: /api/
+  - title: Architecture
+    url: /architecture/
+  - title: GoEcosystem
+    url: https://goecosystem.github.io
 
 # GitHub Pages specific settings
 lsi: false
@@ -22,21 +67,13 @@ incremental: false
 gist:
   noscript: false
 
-# Plugins
-plugins:
-  - jekyll-seo-tag
-  - jekyll-relative-links
-
 # Link rendering
 relative_links:
   enabled: true
   collections: true
 
-# Default layout
-defaults:
-  -
-    scope:
-      path: ""
-      type: "pages"
-    values:
-      layout: "default"
+# GitHub
+github:
+  repository_url: https://github.com/GoEcosystem/go-web-scraper
+  zip_url: https://github.com/GoEcosystem/go-web-scraper/archive/refs/heads/main.zip
+  tar_url: https://github.com/GoEcosystem/go-web-scraper/archive/refs/heads/main.tar.gz

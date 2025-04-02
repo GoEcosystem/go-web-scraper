@@ -1,11 +1,17 @@
 ---
-layout: default
-title: Architecture
+layout: reference
+title: Go Web Scraper Architecture
+description: Technical architecture and design principles of the Go Web Scraper
+repo_name: go-web-scraper
+breadcrumb_name: Architecture
+order: 20
 ---
+
+{% include breadcrumbs.html %}
 
 # Go Web Scraper Architecture
 
-This document outlines the architecture and design principles of the Go Web Scraper project.
+This document outlines the architecture and design principles of the Go Web Scraper project, explaining how the different components interact to create a robust web scraping solution.
 
 ## High-Level Architecture
 
@@ -20,227 +26,179 @@ The Go Web Scraper follows a modular architecture that separates concerns and pr
 Located in `cmd/scraper/main.go`, the CLI provides a user-friendly interface for:
 - Configuring scraping parameters
 - Initiating scraping jobs
+- Exporting data to various formats
 - Starting the web server
-- Exporting data
 
-### 2. Scraper Engine
+The CLI uses the Go standard library `flag` package for argument parsing and configuration.
 
-The core scraping functionality is implemented in the `scrapers` package:
-- Abstract `Scraper` interface
-- Concrete implementations for different websites
-- Rate limiting and concurrency management
-- User agent rotation
+### 2. Scraper Modules
 
-### 3. Database Layer
+The `scrapers/` directory contains individual scraper implementations:
 
-The `db` package handles all data persistence:
-- SQLite database interface
-- Schema management
-- Query operations
-- Connection pooling
+- **Base Scraper Interface** (`scrapers/scraper.go`): Defines the interface that all scrapers must implement
+- **Hacker News Scraper** (`scrapers/hackernews.go`): Extracts articles from Hacker News
+- **Bookstore Scraper** (`scrapers/bookstore.go`): Extracts products from a bookstore website
 
-### 4. Web Server
-
-The `web` package implements a complete web application:
-- HTTP server using Go's standard library
-- RESTful API endpoints
-- HTML templates for server-side rendering
-- Static file serving
-
-### 5. Models
-
-The `models` package defines the data structures used throughout the application:
-- Article model
-- Product model
-- Website model
-- User model
-
-## Key Design Patterns
-
-### 1. Dependency Injection
-
-Components receive their dependencies through constructors, making the code more testable:
+Each scraper implements the following interface:
 
 ```go
-type BookstoreScraper struct {
-    client  *http.Client
-    rateLimit time.Duration
-    logger  *log.Logger
-}
-
-func NewBookstoreScraper(client *http.Client, rateLimit time.Duration, logger *log.Logger) *BookstoreScraper {
-    return &BookstoreScraper{
-        client:  client,
-        rateLimit: rateLimit,
-        logger:  logger,
-    }
+type Scraper interface {
+    Initialize() error
+    Scrape(options ScrapeOptions) ([]interface{}, error)
+    Name() string
 }
 ```
 
-### 2. Repository Pattern
+### 3. Data Models
 
-Data access is abstracted behind interfaces:
+The `models/` directory contains data structures for:
 
-```go
-type ArticleRepository interface {
-    FindAll(page, limit int) ([]Article, error)
-    FindByID(id int) (Article, error)
-    Save(article Article) error
-    // ...
-}
-```
+- **Article** (`models/article.go`): Represents articles from news sites
+- **Product** (`models/product.go`): Represents products from e-commerce sites
+- **Scraper** (`models/scraper.go`): Represents scraper configuration and metadata
 
-### 3. Factory Pattern
+These models are used across the application for data persistence and API responses.
 
-Factories create appropriate scrapers based on the requested source:
+### 4. Database Layer
 
-```go
-func NewScraper(source string, config ScraperConfig) (Scraper, error) {
-    switch source {
-    case "hackernews":
-        return NewHackerNewsScraper(config), nil
-    case "bookstore":
-        return NewBookstoreScraper(config), nil
-    default:
-        return nil, errors.New("unsupported source")
-    }
-}
-```
+Located in `db/` directory, the database layer handles:
 
-### 4. Builder Pattern
+- Database connection and initialization
+- Schema creation and migrations
+- CRUD operations for scraped data
+- Query building and execution
 
-Used for constructing complex objects:
+The application uses SQLite for persistent storage, providing a lightweight yet powerful database solution.
 
-```go
-type ScraperConfigBuilder struct {
-    config ScraperConfig
-}
+### 5. Web Interface
 
-func (b *ScraperConfigBuilder) WithUserAgentRotation() *ScraperConfigBuilder {
-    b.config.EnableUserAgentRotation = true
-    return b
-}
+The web interface is contained in the `web/` directory and consists of:
 
-func (b *ScraperConfigBuilder) WithRateLimit(limit time.Duration) *ScraperConfigBuilder {
-    b.config.RateLimit = limit
-    return b
-}
+- **HTTP Server** (`web/server.go`): Handles HTTP requests and response rendering
+- **Templates** (`web/templates/`): HTML templates using Go's `html/template` package
+- **Static Assets** (`web/static/`): CSS, JavaScript, and images
+- **API Endpoints** (`web/api.go`): RESTful API for accessing scraped data
 
-func (b *ScraperConfigBuilder) Build() ScraperConfig {
-    return b.config
-}
-```
+The web interface uses the standard Go `net/http` package without external frameworks to minimize dependencies.
+
+## Data Flow
+
+1. **User Input**: Either through CLI flags or web interface forms
+2. **Scraper Selection**: The appropriate scraper is selected based on the target website
+3. **Data Extraction**: The scraper navigates the website and extracts structured data
+4. **Processing**: Raw data is processed and transformed into the appropriate models
+5. **Storage**: Data is stored in the SQLite database
+6. **Presentation**: Data is either exported to files or presented via the web interface
 
 ## Concurrency Model
 
-The scraper leverages Go's concurrency primitives:
+The application leverages Go's concurrency primitives:
 
-1. **Goroutines**: Each scraping task runs in its own goroutine
-2. **Channels**: Used for communication between scraper and processor
-3. **WaitGroups**: Coordinate completion of all scraping tasks
-4. **Context**: Handle timeouts and cancellation
+- **Goroutines**: Used for parallel scraping and processing
+- **Channels**: Used for communication between scraping workers
+- **Sync Package**: Used for coordination and synchronization
 
-Example:
-```go
-func (s *Scraper) ScrapePages(urls []string) []Result {
-    var wg sync.WaitGroup
-    resultChan := make(chan Result, len(urls))
-    
-    for _, url := range urls {
-        wg.Add(1)
-        go func(url string) {
-            defer wg.Done()
-            result := s.scrapePage(url)
-            resultChan <- result
-            time.Sleep(s.rateLimit) // Respect rate limiting
-        }(url)
-    }
-    
-    go func() {
-        wg.Wait()
-        close(resultChan)
-    }()
-    
-    var results []Result
-    for result := range resultChan {
-        results = append(results, result)
-    }
-    
-    return results
-}
-```
+The concurrency model is implemented in `utils/collector.go`, which provides:
+
+- Rate limiting to respect website policies
+- Work distribution across multiple goroutines
+- Error handling and propagation
 
 ## Database Schema
 
-The database schema includes the following tables:
+The SQLite database schema includes the following tables:
+
+### Articles Table
 
 ```
-+----------------+       +----------------+
-|    articles    |       |    products    |
-+----------------+       +----------------+
-| id             |       | id             |
-| title          |       | title          |
-| url            |       | author         |
-| author         |       | price          |
-| score          |       | image_url      |
-| comments       |       | rating         |
-| content        |       | description    |
-| date           |       | category       |
-| created_at     |       | created_at     |
-+----------------+       +----------------+
-        |                         |
-        |                         |
-        v                         v
-+----------------+       +----------------+
-|     tags       |       |  categories    |
++-----------------+-------------+
+| Column          | Type        |
++-----------------+-------------+
+| id              | INTEGER     |
+| title           | TEXT        |
+| url             | TEXT        |
+| author          | TEXT        |
+| points          | INTEGER     |
+| comments        | INTEGER     |
+| date            | TIMESTAMP   |
+| source          | TEXT        |
+| content         | TEXT        |
++-----------------+-------------+
+```
+
+### Products Table
+
+```
++-----------------+-------------+
+| Column          | Type        |
++-----------------+-------------+
+| id              | INTEGER     |
+| title           | TEXT        |
+| price           | REAL        |
+| description     | TEXT        |
+| image_url       | TEXT        |
+| rating          | REAL        |
+| category        | TEXT        |
+| source          | TEXT        |
++-----------------+-------------+
+```
+
+### Categories Table
+
+```
 +----------------+       +----------------+
 | id             |       | id             |
 | name           |       | name           |
 +----------------+       | parent_id      |
         ^                +----------------+
-        |                         ^
-        |                         |
-+----------------+                |
-| article_tags   |                |
-+----------------+                |
-| article_id     |                |
-| tag_id         |                |
-+----------------+                |
+        |                        ^
+        |                        |
++----------------+       +----------------+
+| product_id     |       | category_id    |
+| category_id    |       | product_id     |
++----------------+       +----------------+
 ```
 
-## Error Handling Strategy
+## API Design
 
-The application implements a multi-layered error handling approach:
+The REST API follows these principles:
 
-1. **Domain-specific errors**: Custom error types for specific failure cases
-2. **Error wrapping**: Using `fmt.Errorf("context: %w", err)` for error context
-3. **Centralized logging**: All errors are logged with appropriate context
-4. **Graceful degradation**: The system continues operation when possible
+- Resource-oriented routes (e.g., `/api/articles`, `/api/products`)
+- Standard HTTP methods (GET, POST, PUT, DELETE)
+- JSON responses with consistent structure
+- Pagination for list endpoints
+- Comprehensive error handling
 
-## Performance Considerations
+## Authentication & Security
 
-Several optimizations enhance performance:
+The application currently does not implement authentication as it's designed for personal use. However, it includes:
 
-1. **Connection pooling**: Reuse HTTP connections
-2. **Prepared statements**: Optimize database queries
-3. **Caching**: Store frequently accessed data in memory
-4. **Pagination**: Limit result sets to manageable sizes
-5. **Lazy loading**: Defer expensive operations until needed
+- Input validation to prevent SQL injection
+- CORS headers for web security
+- Rate limiting to prevent abuse
 
-## Deployment Model
+## Ethical Scraping Measures
 
-The application is designed for flexible deployment:
+The application implements several measures to ensure ethical web scraping:
 
-1. **Single binary**: Easy distribution as a standalone executable
-2. **Docker support**: Containerized deployment with docker-compose
-3. **Configuration**: Environment variables and config files
-4. **Database migrations**: Automatic schema updates
+- Configurable delays between requests
+- User-agent rotation to distribute load
+- Respect for robots.txt directives
+- Option to limit the depth and breadth of scraping
 
 ## Testing Strategy
 
-The project employs multiple testing approaches:
+The project includes various types of tests:
 
-1. **Unit tests**: Test individual components in isolation
-2. **Integration tests**: Test component interactions
-3. **Mock HTTP server**: Test scrapers without hitting real websites
-4. **In-memory database**: Test database operations without external dependencies
+- **Unit Tests**: Testing individual functions and methods
+- **Integration Tests**: Testing interactions between components
+- **End-to-End Tests**: Testing complete user workflows
+
+## Future Architecture Considerations
+
+Planned architectural improvements include:
+
+- Switching to a plugin architecture for scrapers
+- Adding support for distributed scraping
+- Implementing a more robust job queue
+- Adding support for additional database backends

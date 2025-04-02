@@ -1,0 +1,67 @@
+<div class="breadcrumbs">
+  <div class="breadcrumbs-inner">
+    <a href="{{ '/' | relative_url }}" class="breadcrumb-item">Home</a>
+    
+    {% assign url_parts = page.url | split: '/' %}
+    {% assign url_parts_size = url_parts | size %}
+    
+    {% if url_parts_size > 0 %}
+      {% assign breadcrumb_url = '' %}
+      {% for i in (1..url_parts_size) %}
+        {% if i == url_parts_size %}
+          {% if page.breadcrumb_name %}
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item active">{{ page.breadcrumb_name }}</span>
+          {% else %}
+            {% assign page_title = page.title | default: url_parts[i-1] | capitalize | replace: '-', ' ' %}
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item active">{{ page_title }}</span>
+          {% endif %}
+        {% else %}
+          {% assign breadcrumb_url = breadcrumb_url | append: '/' | append: url_parts[i] %}
+          {% assign check_page = site.pages | where: "url", breadcrumb_url | first %}
+          
+          {% assign url_part_readable = url_parts[i] | capitalize | replace: '-', ' ' %}
+          {% assign breadcrumb_label = check_page.breadcrumb_name | default: check_page.title | default: url_part_readable %}
+          
+          {% if breadcrumb_label != '' and breadcrumb_label != 'Index' %}
+            <span class="breadcrumb-separator">/</span>
+            <a href="{{ breadcrumb_url | relative_url }}" class="breadcrumb-item">{{ breadcrumb_label }}</a>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .breadcrumbs {
+    margin-bottom: 2rem;
+    background-color: #F8F9FA;
+    border-radius: 5px;
+  }
+  
+  .breadcrumbs-inner {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .breadcrumb-item {
+    color: #00ADD8;
+    text-decoration: none;
+  }
+  
+  .breadcrumb-item:hover {
+    text-decoration: underline;
+  }
+  
+  .breadcrumb-item.active {
+    color: #495057;
+    font-weight: 500;
+  }
+  
+  .breadcrumb-separator {
+    color: #ADB5BD;
+    margin: 0 0.5rem;
+  }
+</style>
