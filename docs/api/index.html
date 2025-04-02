@@ -1,0 +1,262 @@
+---
+layout: default
+title: API Documentation
+---
+
+<h1>API Documentation</h1>
+
+<p>The Go Web Scraper provides a RESTful API for accessing and manipulating scraped data programmatically. This documentation covers all the available endpoints and how to use them.</p>
+
+<h2>Base URL</h2>
+
+<p>When running locally:</p>
+<pre><code>http://localhost:8080/api</code></pre>
+
+<h2>Authentication</h2>
+
+<p>Currently, the API doesn't require authentication as it's designed for local use.</p>
+
+<h2>Endpoints</h2>
+
+<h3>Articles</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Endpoint</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GET</td>
+      <td><code>/api/articles</code></td>
+      <td>List all articles with pagination</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td><code>/api/articles/:id</code></td>
+      <td>Get a specific article by ID</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td><code>/api/articles/search</code></td>
+      <td>Search articles by keywords</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>List Articles</h4>
+
+<pre><code>GET /api/articles?page=1&limit=20</code></pre>
+
+<p>Query Parameters:</p>
+<ul>
+  <li><code>page</code>: Page number (default: 1)</li>
+  <li><code>limit</code>: Number of items per page (default: 20)</li>
+  <li><code>sort</code>: Sort field (options: 'date', 'title', 'score')</li>
+  <li><code>order</code>: Sort order (options: 'asc', 'desc')</li>
+</ul>
+
+<p>Response:</p>
+<pre><code class="language-json">{
+  "data": [
+    {
+      "id": 1,
+      "title": "Introducing Go 2.0",
+      "url": "https://example.com/go-2-release",
+      "score": 342,
+      "comments": 127,
+      "date": "2025-03-30T15:42:31Z",
+      "author": "gopher"
+    },
+    ...
+  ],
+  "pagination": {
+    "total": 256,
+    "page": 1,
+    "limit": 20,
+    "totalPages": 13
+  }
+}</code></pre>
+
+<h4>Get Article by ID</h4>
+
+<pre><code>GET /api/articles/42</code></pre>
+
+<p>Response:</p>
+<pre><code class="language-json">{
+  "id": 42,
+  "title": "Advanced Concurrency Patterns in Go",
+  "url": "https://example.com/concurrency-patterns",
+  "score": 512,
+  "comments": 89,
+  "date": "2025-03-25T09:17:22Z",
+  "author": "concurrency_fan",
+  "content": "Full article content here...",
+  "tags": ["go", "concurrency", "programming"]
+}</code></pre>
+
+<h4>Search Articles</h4>
+
+<pre><code>GET /api/articles/search?q=golang+concurrency</code></pre>
+
+<p>Query Parameters:</p>
+<ul>
+  <li><code>q</code>: Search query</li>
+  <li><code>page</code>: Page number (default: 1)</li>
+  <li><code>limit</code>: Number of items per page (default: 20)</li>
+</ul>
+
+<p>Response: Same format as List Articles.</p>
+
+<h3>Products</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Endpoint</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GET</td>
+      <td><code>/api/products</code></td>
+      <td>List all products with pagination</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td><code>/api/products/:id</code></td>
+      <td>Get a specific product by ID</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td><code>/api/products/search</code></td>
+      <td>Search products by keywords</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>List Products</h4>
+
+<pre><code>GET /api/products?page=1&limit=20</code></pre>
+
+<p>Query Parameters:</p>
+<ul>
+  <li><code>page</code>: Page number (default: 1)</li>
+  <li><code>limit</code>: Number of items per page (default: 20)</li>
+  <li><code>sort</code>: Sort field (options: 'price', 'title', 'rating')</li>
+  <li><code>order</code>: Sort order (options: 'asc', 'desc')</li>
+</ul>
+
+<p>Response:</p>
+<pre><code class="language-json">{
+  "data": [
+    {
+      "id": 1,
+      "title": "Go Programming Language Book",
+      "price": 39.99,
+      "rating": 4.8,
+      "author": "Alan A.A. Donovan, Brian W. Kernighan",
+      "category": "programming",
+      "image_url": "https://example.com/go-book.jpg"
+    },
+    ...
+  ],
+  "pagination": {
+    "total": 124,
+    "page": 1,
+    "limit": 20,
+    "totalPages": 7
+  }
+}</code></pre>
+
+<h4>Get Product by ID</h4>
+
+<pre><code>GET /api/products/42</code></pre>
+
+<p>Response:</p>
+<pre><code class="language-json">{
+  "id": 42,
+  "title": "Go in Action",
+  "price": 35.99,
+  "rating": 4.5,
+  "author": "William Kennedy",
+  "category": "programming",
+  "description": "Full product description here...",
+  "image_url": "https://example.com/go-in-action.jpg",
+  "tags": ["go", "programming", "book"]
+}</code></pre>
+
+<h3>Error Handling</h3>
+
+<p>The API returns standard HTTP status codes to indicate the success or failure of a request:</p>
+
+<ul>
+  <li><code>200 OK</code> - The request was successful</li>
+  <li><code>400 Bad Request</code> - The request could not be understood or had invalid parameters</li>
+  <li><code>404 Not Found</code> - The requested resource was not found</li>
+  <li><code>500 Internal Server Error</code> - An unexpected error occurred on the server</li>
+</ul>
+
+<p>Error responses include a message explaining the error:</p>
+
+<pre><code class="language-json">{
+  "error": "Resource not found",
+  "message": "Article with ID 9999 does not exist"
+}</code></pre>
+
+<h3>Rate Limiting</h3>
+
+<p>Currently, there are no rate limits implemented for the API as it's designed for local use.</p>
+
+<h2>Examples</h2>
+
+<h3>cURL</h3>
+
+<pre><code>curl http://localhost:8080/api/articles?page=1&limit=10
+
+curl http://localhost:8080/api/articles/42
+
+curl http://localhost:8080/api/articles/search?q=golang</code></pre>
+
+<h3>Go</h3>
+
+<pre><code class="language-go">package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	resp, err := http.Get("http://localhost:8080/api/articles")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	var result map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	fmt.Println("Articles:", result)
+}</code></pre>
+
+<h3>JavaScript</h3>
+
+<pre><code class="language-javascript">fetch('http://localhost:8080/api/articles')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Articles:', data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });</code></pre>
