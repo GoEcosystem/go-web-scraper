@@ -1,0 +1,119 @@
+name: Documentation Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**/*.md'
+      - '**/*.html'
+      - '_layouts/**'
+      - '_includes/**'
+  workflow_dispatch:
+
+jobs:
+  markdown-lint:
+    name: Markdown Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+
+      - name: Run markdownlint
+        run: markdownlint '**/*.md' --ignore node_modules
+        continue-on-error: true  # Don't fail the build, just report issues
+        
+      - name: Comment on PR
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = process.env.MARKDOWN_LINT_OUTPUT;
+            if (output && output.trim() !== '') {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '## Markdown Linting Results\n\n```\n' + output + '\n```\n\nPlease fix these issues before merging.'
+              });
+            }
+
+  html-validate:
+    name: HTML Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          
+      - name: Install html-validate
+        run: npm install -g html-validate
+
+      - name: Validate HTML files
+        run: |
+          find . -name "*.html" -not -path "./node_modules/*" -not -path "./_site/*" -exec html-validate {} \;
+        continue-on-error: true  # Don't fail the build, just report issues
+
+  link-check:
+    name: Check Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          gem install jekyll
+          gem install html-proofer
+
+      - name: Build site
+        run: |
+          jekyll build
+
+      - name: Check links
+        run: |
+          htmlproofer ./_site \
+            --allow-hash-href \
+            --check-html \
+            --check-img-http \
+            --disable-external \
+            --report-missing-names \
+            --report-script-embeds \
+            --ignore-status-codes "999,401,403"
+        continue-on-error: true  # Don't fail the build, just report issues
+        
+      - name: Comment on PR with link check results
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = process.env.LINK_CHECK_OUTPUT;
+            if (output && output.trim() !== '') {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '## Link Check Results\n\n```\n' + output + '\n```\n\nPlease fix broken links before merging.'
+              });
+            }
