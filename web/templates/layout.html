@@ -4,22 +4,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ if .Title }}{{ .Title }}{{ else }}Web Scraper{{ end }} - Web Scraper</title>
+    <title>{{ if .Title }}{{ .Title }}{{ else }}Go Web Scraper{{ end }} - GoEcosystem</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            padding-top: 20px;
-            padding-bottom: 40px;
+        :root {
+            --primary-color: #00ADD8; /* Go blue */
         }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Header styles */
+        .site-header {
+            background-color: var(--primary-color);
+            color: #FFFFFF;
+            padding: 0.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .site-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .site-logo {
+            display: flex;
+            align-items: center;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .logo-square {
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            margin-right: 8px;
+        }
+        
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        
+        .site-nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .site-nav li {
+            margin: 0 0 0 1.5rem;
+        }
+        
+        .site-nav a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            border-bottom: 3px solid transparent;
+            transition: border-color 0.2s;
+            display: block;
+        }
+        
+        .site-nav a:hover, 
+        .site-nav a.active {
+            border-bottom-color: #FFFFFF;
+            text-decoration: none;
+        }
+        
+        /* Original styles */
         .navbar {
             margin-bottom: 20px;
+        }
+        
+        .main-content {
+            padding-top: 2rem;
         }
     </style>
 </head>
 <body>
+    <!-- GoEcosystem Standard Header -->
+    <header class="site-header">
+        <div class="container">
+            <a href="https://goecosystem.github.io" class="site-logo">
+                <div class="logo-square"></div>
+                <span class="logo-text">GoEcosystem</span>
+            </a>
+            <nav class="site-nav">
+                <ul>
+                    <li><a href="https://goecosystem.github.io" >Home</a></li>
+                    <li><a href="https://goecosystem.github.io/#repositories">Repositories</a></li>
+                    <li><a href="https://goecosystem.github.io/documentation">Documentation</a></li>
+                    <li><a href="https://github.com/GoEcosystem">GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- App-specific navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">Web Scraper</a>
+            <a class="navbar-brand" href="/">Go Web Scraper</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -39,7 +135,7 @@
         </div>
     </nav>
 
-    <main class="container">
+    <main class="container main-content">
         <!-- This is where page-specific content will go -->
         {{ block "content" . }}{{ end }}
     </main>
