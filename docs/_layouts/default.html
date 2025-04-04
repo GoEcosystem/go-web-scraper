@@ -20,14 +20,16 @@
 <body>
     <header class="site-header">
         <div class="container">
-            <a href="{{ '/' | relative_url }}" class="site-logo">
+            <a href="https://goecosystem.github.io" class="site-logo">
+                <div class="logo-square"></div>
                 <span class="logo-text">GoEcosystem</span>
             </a>
             <nav class="site-nav">
                 <ul>
-                    {% for item in site.navigation %}
-                    <li><a href="{{ item.url | relative_url }}" {% if page.url == item.url %}class="active"{% endif %}>{{ item.title }}</a></li>
-                    {% endfor %}
+                    <li><a href="https://goecosystem.github.io">Home</a></li>
+                    <li><a href="https://goecosystem.github.io/#repositories">Repositories</a></li>
+                    <li><a href="https://goecosystem.github.io/documentation">Documentation</a></li>
+                    <li><a href="https://github.com/GoEcosystem">GitHub</a></li>
                 </ul>
             </nav>
         </div>
@@ -50,20 +52,20 @@
 
     <footer class="site-footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <h3>GoEcosystem</h3>
-                    <p>A comprehensive ecosystem of Go applications, libraries, and tools.</p>
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Go Web Scraper</h3>
+                    <p>A comprehensive web scraping solution built in Go with database integration and web interface.</p>
                 </div>
-                <div class="footer-col">
+                <div class="footer-column">
                     <h3>Resources</h3>
                     <ul>
-                        <li><a href="{{ '/documentation/' | relative_url }}">Documentation</a></li>
-                        <li><a href="{{ '/api-references/' | relative_url }}">API References</a></li>
-                        <li><a href="{{ '/guides/' | relative_url }}">Guides</a></li>
+                        <li><a href="{{ '/api/' | relative_url }}">API Reference</a></li>
+                        <li><a href="{{ '/architecture/' | relative_url }}">Architecture</a></li>
+                        <li><a href="{{ '/' | relative_url }}">Documentation</a></li>
                     </ul>
                 </div>
-                <div class="footer-col">
+                <div class="footer-column">
                     <h3>Links</h3>
                     <ul>
                         <li><a href="https://github.com/GoEcosystem">GitHub</a></li>
