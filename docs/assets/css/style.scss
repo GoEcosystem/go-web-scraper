@@ -1,5 +1,8 @@
 ---
+# Only the main Sass file needs front matter (the dashes are enough)
 ---
+
+@import "jekyll-theme-minimal";
 
 // Define color variables
 $primary-color: #00ADD8; // Go blue
@@ -8,6 +11,7 @@ $secondary-color: #F7F7F7;
 $text-color: #333333;
 $light-text: #FFFFFF;
 $border-color: #E9ECEF;
+$dark-bg: #0D1117;
 
 // Base styles
 body {
@@ -27,7 +31,7 @@ body {
 
 // Header styles
 .site-header {
-  background-color: $primary-color;
+  background-color: $dark-bg;
   color: $light-text;
   padding: 0.5rem 0;
   position: sticky;
@@ -275,53 +279,6 @@ body {
 
 .footer-bottom a:hover {
   color: $primary-color;
-}
-
-// Documentation specific styles
-.page-header {
-  background-color: $primary-color;
-  color: $light-text;
-  padding: 3rem 0;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.page-header h1 {
-  color: $light-text;
-  margin-bottom: 0.5rem;
-}
-
-.page-description {
-  color: $light-text;
-  font-size: 1.2rem;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-// Features section
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
-}
-
-.feature-card {
-  border: 1px solid $border-color;
-  border-radius: 8px;
-  padding: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.feature-card h3 {
-  color: $primary-color;
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
 }
 
 // Responsive adjustments
