@@ -9,7 +9,7 @@ order: 20
 
 {% include breadcrumbs.html %}
 
-# Go Web Scraper Architecture
+## Go Web Scraper Architecture
 
 This document outlines the architecture and design principles of the Go Web Scraper project, explaining how the different components interact to create a robust web scraping solution.
 
