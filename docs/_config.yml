@@ -4,6 +4,7 @@ description: A comprehensive web scraping solution built in Go with database int
 baseurl: ""
 url: "https://goecosystem.github.io/go-web-scraper"
 repository: GoEcosystem/go-web-scraper
+last_updated: "2025-04-04"
 
 # Build settings
 markdown: kramdown
