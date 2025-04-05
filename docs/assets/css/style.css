@@ -532,6 +532,15 @@ th {
   text-decoration: underline;
 }
 
+/* Fix for unwanted anchor symbols */
+.section-title a.header-anchor {
+  display: none;
+}
+
+.section-title::after {
+  content: none !important;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .site-header .container {

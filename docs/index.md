@@ -7,8 +7,8 @@ repo_name: go-web-scraper
 
 <div class="hero">
   <div class="container">
-    <h1>GoEcosystem Documentation</h1>
-    <p>Organization-wide documentation and guidelines for GoEcosystem projects</p>
+    <h1>Go Web Scraper</h1>
+    <p>A comprehensive web scraping solution built in Go with database integration and web interface</p>
     <a href="#quick-start" class="btn">Get Started</a>
   </div>
 </div>
