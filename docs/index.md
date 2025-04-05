@@ -8,7 +8,7 @@ repo_name: go-web-scraper
 <div class="hero">
   <div class="container">
     <h1>Go Web Scraper</h1>
-    <p>A comprehensive web scraping solution built in Go with database integration and web interface</p>
+    <p>A comprehensive web scraping solution built in Go with SQLite database integration and web interface</p>
     <a href="#quick-start" class="btn">Get Started</a>
   </div>
 </div>
@@ -22,10 +22,11 @@ repo_name: go-web-scraper
   </div>
   <div class="terminal-content">
     <div class="command">git clone https://github.com/GoEcosystem/go-web-scraper.git</div>
-    <div class="output">Downloading Go web scraper and examples...</div>
+    <div class="output">Cloning into 'go-web-scraper'...</div>
     <div class="command">cd go-web-scraper</div>
-    <div class="command">go build ./cmd/webserver</div>
-    <div class="output">Hello, GoEcosystem! Ready to extract web data.</div>
+    <div class="command">go build ./cmd/scraper</div>
+    <div class="command">./scraper -source hackernews -output data/articles.json</div>
+    <div class="output">Successfully scraped 30 articles from Hacker News</div>
   </div>
 </div>
 
