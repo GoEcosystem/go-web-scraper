@@ -192,6 +192,13 @@ th {
   text-decoration: none;
 }
 
+.logo-square {
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  margin-right: 8px;
+}
+
 .logo-text {
   margin-left: 0.5rem;
 }
