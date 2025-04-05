@@ -169,7 +169,7 @@ th {
 
 /* Header */
 .site-header {
-  background-color: var(--dark-color);
+  background-color: var(--primary-color);
   padding: 1rem 0;
   position: sticky;
   top: 0;
@@ -459,6 +459,77 @@ th {
 .highlight {
   border-radius: 5px;
   overflow: hidden;
+}
+
+/* Example Terminal */
+.example-terminal {
+  max-width: 600px;
+  margin: -70px auto 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  background-color: #252525;
+  position: relative;
+  z-index: 10;
+}
+
+.terminal-header {
+  background-color: #333;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.terminal-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.terminal-button.red {
+  background-color: #FF5F56;
+}
+
+.terminal-button.yellow {
+  background-color: #FFBD2E;
+}
+
+.terminal-button.green {
+  background-color: #27C93F;
+}
+
+.terminal-title {
+  color: #AAA;
+  font-size: 0.8rem;
+  margin-left: 8px;
+  font-family: var(--font-family-mono);
+}
+
+.terminal-content {
+  padding: 15px 20px;
+  font-family: var(--font-family-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #E0E0E0;
+}
+
+.card-icon {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.card-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.card-link:hover {
+  text-decoration: underline;
 }
 
 /* Responsive design */
