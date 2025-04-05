@@ -1,10 +1,10 @@
 # Site settings
 title: Go Web Scraper
 description: A comprehensive web scraping solution built in Go with database integration and web interface
-baseurl: ""
-url: "https://goecosystem.github.io/go-web-scraper"
+baseurl: "/go-web-scraper"
+url: "https://goecosystem.github.io"
 repository: GoEcosystem/go-web-scraper
-last_updated: "2025-04-04"
+last_updated: "2025-04-05"
 
 # Build settings
 markdown: kramdown
