@@ -541,6 +541,13 @@ th {
   content: none !important;
 }
 
+/* Go logo styling */
+.go-logo {
+  height: 30px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .site-header .container {
