@@ -1,0 +1,158 @@
+{{ define "content" }}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Scraper Settings</h1>
+        <a href="/" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
+
+    {{ if .Success }}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ .Success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{ end }}
+
+    {{ if .Error }}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ .Error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{ end }}
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">General Settings</h5>
+        </div>
+        <div class="card-body">
+            <form action="/settings/general" method="post">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="dbPath" class="form-label">Database Path</label>
+                        <input type="text" class="form-control" id="dbPath" name="dbPath" value="{{ .Settings.DBPath }}" required>
+                        <div class="form-text">Path to SQLite database file</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="outputDir" class="form-label">Output Directory</label>
+                        <input type="text" class="form-control" id="outputDir" name="outputDir" value="{{ .Settings.OutputDir }}" required>
+                        <div class="form-text">Default directory for exported files</div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="maxConnections" class="form-label">Max Concurrent Connections</label>
+                        <input type="number" class="form-control" id="maxConnections" name="maxConnections" value="{{ .Settings.MaxConnections }}" min="1" max="20" required>
+                        <div class="form-text">Maximum number of concurrent scraping connections</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="logLevel" class="form-label">Log Level</label>
+                        <select class="form-select" id="logLevel" name="logLevel">
+                            <option value="debug" {{ if eq .Settings.LogLevel "debug" }}selected{{ end }}>Debug</option>
+                            <option value="info" {{ if eq .Settings.LogLevel "info" }}selected{{ end }}>Info</option>
+                            <option value="warning" {{ if eq .Settings.LogLevel "warning" }}selected{{ end }}>Warning</option>
+                            <option value="error" {{ if eq .Settings.LogLevel "error" }}selected{{ end }}>Error</option>
+                        </select>
+                        <div class="form-text">Logging verbosity level</div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save General Settings</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="card-title mb-0">Scraper Settings</h5>
+        </div>
+        <div class="card-body">
+            <form action="/settings/scraper" method="post">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="requestDelay" class="form-label">Request Delay (ms)</label>
+                        <input type="number" class="form-control" id="requestDelay" name="requestDelay" value="{{ .Settings.RequestDelay }}" min="100" required>
+                        <div class="form-text">Delay between requests to avoid rate limiting</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="timeout" class="form-label">Request Timeout (seconds)</label>
+                        <input type="number" class="form-control" id="timeout" name="timeout" value="{{ .Settings.Timeout }}" min="1" max="60" required>
+                        <div class="form-text">Maximum time to wait for a response</div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="userAgents" class="form-label">User Agents</label>
+                        <textarea class="form-control" id="userAgents" name="userAgents" rows="4" required>{{ .Settings.UserAgents }}</textarea>
+                        <div class="form-text">List of user agents for rotation (one per line)</div>
+                    </div>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="respectRobotsTxt" name="respectRobotsTxt" {{ if .Settings.RespectRobotsTxt }}checked{{ end }}>
+                    <label class="form-check-label" for="respectRobotsTxt">Respect robots.txt rules</label>
+                </div>
+                <button type="submit" class="btn btn-success">Save Scraper Settings</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="card-title mb-0">Data Retention</h5>
+        </div>
+        <div class="card-body">
+            <form action="/settings/retention" method="post">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="dataRetentionDays" class="form-label">Data Retention Period (days)</label>
+                        <input type="number" class="form-control" id="dataRetentionDays" name="dataRetentionDays" value="{{ .Settings.DataRetentionDays }}" min="1" required>
+                        <div class="form-text">Number of days to keep scraped data before automatic deletion</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="maxStorageSize" class="form-label">Maximum Storage Size (MB)</label>
+                        <input type="number" class="form-control" id="maxStorageSize" name="maxStorageSize" value="{{ .Settings.MaxStorageSize }}" min="1" required>
+                        <div class="form-text">Maximum database size in megabytes</div>
+                    </div>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="enableAutoCleanup" name="enableAutoCleanup" {{ if .Settings.EnableAutoCleanup }}checked{{ end }}>
+                    <label class="form-check-label" for="enableAutoCleanup">Enable automatic data cleanup</label>
+                </div>
+                <button type="submit" class="btn btn-warning text-dark">Save Retention Settings</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            <h5 class="card-title mb-0">Database Management</h5>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <strong>Warning:</strong> These operations can result in data loss and cannot be undone.
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100 border-warning">
+                        <div class="card-body">
+                            <h5 class="card-title">Clear Data</h5>
+                            <p class="card-text">Remove all articles and products from the database.</p>
+                            <form action="/settings/clear-data" method="post" onsubmit="return confirm('Are you sure you want to delete all scraped data? This action cannot be undone.');">
+                                <button type="submit" class="btn btn-outline-warning">Clear All Data</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100 border-danger">
+                        <div class="card-body">
+                            <h5 class="card-title">Reset Database</h5>
+                            <p class="card-text">Reset the entire database to its initial state.</p>
+                            <form action="/settings/reset-database" method="post" onsubmit="return confirm('Are you sure you want to reset the database? All data will be lost and this action cannot be undone.');">
+                                <button type="submit" class="btn btn-outline-danger">Reset Database</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

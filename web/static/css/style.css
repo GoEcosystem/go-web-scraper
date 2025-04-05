@@ -1,0 +1,269 @@
+/* Go Web Scraper - Main Stylesheet */
+
+:root {
+    --primary-color: #00ADD8; /* Go blue/turquoise */
+    --secondary-color: #5DC9E2;
+    --dark-color: #333333;
+    --light-color: #f4f4f4;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+    --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-family-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+}
+
+/* Base Styles */
+body {
+    font-family: var(--font-family-sans);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: var(--dark-color);
+}
+
+/* Header & Navigation */
+.site-header {
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+    padding: 0.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.site-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-logo {
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.site-logo:hover {
+    color: #FFFFFF;
+}
+
+.logo-square {
+    width: 24px;
+    height: 24px;
+    background-color: #FFFFFF;
+    margin-right: 8px;
+}
+
+.logo-text {
+    font-weight: 600;
+}
+
+.site-nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.site-nav li {
+    margin-left: 1.5rem;
+}
+
+.site-nav a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.site-nav a:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Terminal styling */
+.terminal {
+    background-color: #252525;
+    border-radius: 6px;
+    padding: 15px;
+    color: #E0E0E0;
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 15px 0;
+}
+
+.command {
+    color: #3C99DC;
+    margin-bottom: 6px;
+    white-space: pre-wrap;
+    overflow-x: auto;
+}
+
+.command::before {
+    content: "$ ";
+    color: #3C99DC;
+}
+
+.output {
+    color: #E0E0E0;
+    margin-bottom: 6px;
+    padding-left: 12px;
+    white-space: pre-wrap;
+    overflow-x: auto;
+}
+
+/* Example Terminal */
+.example-terminal {
+    max-width: 700px;
+    margin: 0 auto 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    background-color: #252525;
+}
+
+.terminal-header {
+    background-color: #333;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.terminal-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.terminal-button.red {
+    background-color: #FF5F56;
+}
+
+.terminal-button.yellow {
+    background-color: #FFBD2E;
+}
+
+.terminal-button.green {
+    background-color: #27C93F;
+}
+
+.terminal-title {
+    color: #AAA;
+    font-size: 0.8rem;
+    margin-left: 8px;
+    font-family: var(--font-family-mono);
+}
+
+.terminal-content {
+    padding: 15px 20px;
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #E0E0E0;
+}
+
+/* Card customizations */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-weight: 600;
+}
+
+.card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* Button enhancements */
+.btn {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #0097ba;
+    border-color: #0097ba;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Footer */
+.site-footer {
+    background-color: var(--dark-color);
+    color: #FFFFFF;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+.site-footer a {
+    color: #FFFFFF;
+    opacity: 0.8;
+}
+
+.site-footer a:hover {
+    opacity: 1;
+    text-decoration: none;
+}
+
+/* Utilities */
+pre code {
+    display: block;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    overflow-x: auto;
+}
+
+.copy-command {
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.copy-command:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .site-nav {
+        display: none;
+    }
+    
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+}

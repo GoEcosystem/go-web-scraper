@@ -1,0 +1,133 @@
+{{ define "content" }}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Import Data</h1>
+        <a href="/" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
+
+    {{ if .Success }}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ .Success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{ end }}
+
+    {{ if .Error }}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ .Error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{ end }}
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Import Articles</h5>
+                </div>
+                <div class="card-body">
+                    <p>Import articles from a JSON or CSV file into the database.</p>
+                    <form action="/import/articles" method="post" enctype="multipart/form-data" class="mt-4">
+                        <div class="mb-3">
+                            <label for="articleFile" class="form-label">Select File</label>
+                            <input class="form-control" type="file" id="articleFile" name="file" accept=".json,.csv" required>
+                            <div class="form-text">Supported formats: JSON, CSV</div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="overwriteArticles" name="overwrite">
+                            <label class="form-check-label" for="overwriteArticles">Overwrite existing articles</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Import Articles</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">Import Products</h5>
+                </div>
+                <div class="card-body">
+                    <p>Import products from a JSON or CSV file into the database.</p>
+                    <form action="/import/products" method="post" enctype="multipart/form-data" class="mt-4">
+                        <div class="mb-3">
+                            <label for="productFile" class="form-label">Select File</label>
+                            <input class="form-control" type="file" id="productFile" name="file" accept=".json,.csv" required>
+                            <div class="form-text">Supported formats: JSON, CSV</div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="overwriteProducts" name="overwrite">
+                            <label class="form-check-label" for="overwriteProducts">Overwrite existing products</label>
+                        </div>
+                        <button type="submit" class="btn btn-success">Import Products</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="card-title mb-0">Import Guidelines</h5>
+        </div>
+        <div class="card-body">
+            <div class="accordion" id="importGuidelines">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            JSON Format Requirements
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#importGuidelines">
+                        <div class="accordion-body">
+                            <p>JSON files should contain an array of objects with the following structure:</p>
+                            <pre><code>// For Articles
+[
+  {
+    "title": "Article Title",
+    "url": "https://example.com/article",
+    "author": "Author Name",
+    "points": 100,
+    "comments": 42
+  }
+]
+
+// For Products
+[
+  {
+    "title": "Product Name",
+    "description": "Product description text",
+    "price": 29.99,
+    "url": "https://example.com/product",
+    "imageUrl": "https://example.com/image.jpg",
+    "category": "Category Name"
+  }
+]</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            CSV Format Requirements
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#importGuidelines">
+                        <div class="accordion-body">
+                            <p>CSV files should include headers and follow these formats:</p>
+                            <pre><code>// For Articles
+title,url,author,points,comments
+"Article Title","https://example.com/article","Author Name",100,42
+
+// For Products
+title,description,price,url,imageUrl,category
+"Product Name","Product description text",29.99,"https://example.com/product","https://example.com/image.jpg","Category Name"</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
