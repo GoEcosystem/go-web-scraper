@@ -2,14 +2,24 @@
 layout: default
 ---
 
-<div class="reference-documentation">
-  <div class="reference-sidebar">
-    <div class="sidebar-header">On This Page</div>
-    <nav class="toc" id="toc"></nav>
-  </div>
-  
-  <div class="reference-content">
-    {{ content }}
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sticky-top" style="top: 80px;">
+        <div class="card">
+          <div class="card-header">
+            <h5>On This Page</h5>
+          </div>
+          <div class="card-body">
+            <nav id="toc" class="reference-toc"></nav>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-9 reference-content">
+      {{ content }}
+    </div>
   </div>
 </div>
 
@@ -21,37 +31,95 @@ layout: default
     
     if (headings.length > 0 && toc) {
       const tocList = document.createElement('ul');
-      tocList.className = 'toc-list';
+      tocList.className = 'list-unstyled';
       
-      headings.forEach(function(heading, index) {
-        // Add id to heading if it doesn't have one
+      headings.forEach(heading => {
+        // Create ID if heading doesn't have one
         if (!heading.id) {
-          heading.id = 'heading-' + index;
+          heading.id = heading.textContent
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-');
         }
         
         const listItem = document.createElement('li');
         const link = document.createElement('a');
-        link.href = '#' + heading.id;
+        link.href = `#${heading.id}`;
         link.textContent = heading.textContent;
         
-        // Add different classes based on heading level
-        if (heading.tagName.toLowerCase() === 'h3') {
-          listItem.className = 'toc-subitem';
+        // Add appropriate indentation for h3
+        if (heading.tagName === 'H3') {
+          listItem.style.paddingLeft = '15px';
         }
         
         listItem.appendChild(link);
         tocList.appendChild(listItem);
-        
-        // Add click event for smooth scrolling
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-          });
-        });
       });
       
       toc.appendChild(tocList);
     }
   });
 </script>
+
+<style>
+  /* Reference specific styling */
+  .reference-content h2 {
+    color: var(--primary-color);
+    margin-top: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .reference-content h3 {
+    margin-top: 1.5rem;
+  }
+  
+  .reference-content p,
+  .reference-content li {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  .reference-content pre {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+  
+  .reference-content code {
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+  }
+  
+  .reference-content table {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+  }
+  
+  .reference-content th {
+    background-color: #f8f9fa;
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+    text-align: left;
+  }
+  
+  .reference-content td {
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+  }
+  
+  .reference-toc a {
+    color: #495057;
+    text-decoration: none;
+    display: block;
+    padding: 0.25rem 0;
+    font-size: 0.9rem;
+  }
+  
+  .reference-toc a:hover {
+    color: var(--primary-color);
+  }
+</style>
